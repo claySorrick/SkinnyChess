@@ -49,7 +49,7 @@ while not done:
     if clk_counter % 10 == 0:
         clk_counter = 0
         scroll_offset += 2
-        if scroll_offset > 56:
+        if scroll_offset > OFFSET:
             scroll_offset = 0
 
     for event in pygame.event.get():  # User did something

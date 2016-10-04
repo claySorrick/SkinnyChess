@@ -1,22 +1,23 @@
 # Define some colors
 BLACK = (0, 0, 0)  # background
-WHITE = (255, 255, 255)  # empty squares
+LIGHT_RED = (153, 0, 0)  # empty squares
+BLUE = (0, 102, 204)  # empty squares
 GREEN = (0, 255, 0)  # PAWN
 RED = (255, 0, 0)  # QUEEN
-BLUE = (0, 0, 255)  # BISHOP
+DARK_BLUE = (0, 0, 255)  # BISHOP
 YELLOW = (255, 255, 0)  # ROOK
 PURPLE = (128, 0, 128)  # KNIGHT
 GREY = (192, 192, 192)  # highlighting
 LIGHT_BLUE = (153, 204, 255)  # heaven
-DARK_RED = (153, 0, 0)  # hell
+LIGHT_BLACK = (96, 96, 96)  # hell
 
 
 # This sets the width and height of each grid location
-SQUARE_WIDTH = 50
-SQUARE_HEIGHT = 50
+SQUARE_WIDTH = 80
+SQUARE_HEIGHT = 80
 
 # This sets the margin between each Square
-MARGIN = 5
+MARGIN = 8
 
 # Dimensions of the board
 BOARD_X = 4
@@ -31,3 +32,6 @@ OFFSET = SQUARE_HEIGHT + MARGIN
 
 # heaven (future board) height
 HEAVEN_HEIGHT = 4
+
+# piece offset
+PIECE_OFFSET = 14

@@ -8,7 +8,7 @@ from util import *
 class Square:
 
     def __init__(self):
-        self.color = WHITE
+        self.color = LIGHT_RED
         self.piece = ""
         self.selected = False
         self.highlighted = False
@@ -26,8 +26,9 @@ class Square:
         self.piece = piece
 
     def set_enemy_piece(self, piece):
-        piece.set_enemy()
-        self.piece = piece
+        if piece:
+            piece.set_enemy()
+            self.piece = piece
 
     def remove_piece(self):
         self.piece = ""

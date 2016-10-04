@@ -46,51 +46,42 @@ class Board:
         for x in range(self.col):
             for y in range(self.row):
                 selected_mod = 1
-                color = self.piece_color(self.board[x][y].get_piece())
-                if self.board[x][y].is_highlighted():
-                    color = GREY
                 if self.board[x][y].is_selected():
                     selected_mod = 3
+                if self.board[x][y].is_highlighted():
+                    color = GREY
+                else:
+                    if (x + y) % 2 == 0:
+                        color = BLUE
+                    else:
+                        color = LIGHT_BLACK
 
                 pygame.draw.rect(screen, color,
                                  [(MARGIN + SQUARE_WIDTH) * x + MARGIN + (1 * selected_mod),
                                   (MARGIN + SQUARE_HEIGHT) * y + MARGIN + (1 * selected_mod) + OFFSET + move_offset,
                                   SQUARE_WIDTH - (2 * selected_mod),
                                   SQUARE_HEIGHT - (2 * selected_mod)])
-        selected_mod = 1
+                if self.board[x][y].has_piece():
+                    screen.blit(self.board[x][y].get_piece().get_image(),
+                        ((MARGIN + SQUARE_WIDTH) * x + MARGIN + (1 * selected_mod) + PIECE_OFFSET,
+                        (MARGIN + SQUARE_HEIGHT) * y + MARGIN + (1 * selected_mod) + OFFSET + move_offset + PIECE_OFFSET))
 
         # draw heaven
         for x in range(self.col):
             for y in range(-1, 1):
                 pygame.draw.rect(screen, LIGHT_BLUE,
-                                 [(MARGIN + SQUARE_WIDTH) * x + MARGIN + (1 * selected_mod),
-                                  (MARGIN + SQUARE_HEIGHT) * y + MARGIN + (1 * selected_mod) + move_offset,
-                                  SQUARE_WIDTH - (2 * selected_mod),
-                                  SQUARE_HEIGHT - (2 * selected_mod)])
+                                 [(MARGIN + SQUARE_WIDTH) * x + MARGIN + 1,
+                                  (MARGIN + SQUARE_HEIGHT) * y + MARGIN + 1 + move_offset,
+                                  SQUARE_WIDTH - 2,
+                                  SQUARE_HEIGHT - 2])
 
         # draw hell
         for x in range(self.col):
-            pygame.draw.rect(screen, DARK_RED,
-                             [(MARGIN + SQUARE_WIDTH) * x + MARGIN + (1 * selected_mod),
-                              (MARGIN + SQUARE_HEIGHT) * (BOARD_Y + 1) + MARGIN + (1 * selected_mod) + move_offset,
-                              SQUARE_WIDTH - (2 * selected_mod),
-                              SQUARE_HEIGHT - (2 * selected_mod)])
-
-    @staticmethod
-    def piece_color(piece):
-        if isinstance(piece, Pawn):
-            color = GREEN
-        elif isinstance(piece, Queen):
-            color = RED
-        elif isinstance(piece, Bishop):
-            color = BLUE
-        elif isinstance(piece, Rook):
-            color = YELLOW
-        elif isinstance(piece, Knight):
-            color = PURPLE
-        else:
-            color = WHITE
-        return color
+            pygame.draw.rect(screen, LIGHT_RED,
+                             [(MARGIN + SQUARE_WIDTH) * x + MARGIN + 1,
+                              (MARGIN + SQUARE_HEIGHT) * (BOARD_Y + 1) + MARGIN + 1 + move_offset,
+                              SQUARE_WIDTH - 2,
+                              SQUARE_HEIGHT - 2])
 
     def highlight_squares(self, squares):
         if squares:
@@ -155,7 +146,7 @@ class Board:
     def get_random_piece():
         rand = random.randint(0, 100)
         if rand < 60:
-            new_piece = Piece()
+            new_piece = ""
         elif rand < 70:
             new_piece = Knight()
         elif rand < 80:

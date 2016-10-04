@@ -4,6 +4,7 @@ Piece classes
 
 from Piece import Piece
 from util import *
+import pygame
 
 """
 Pawn Piece class
@@ -16,9 +17,8 @@ class Pawn(Piece):
         self.name = "PAWN"
         self.enemy = False
         self.alive = True
-
-    def get_name(self):
-        return self.name
+        self.image = pygame.image.load("./images/pw.png")
+        self.enemy_image = pygame.image.load("./images/pb.png")
 
     def get_moves(self, pos):
         x = pos[0]
@@ -43,9 +43,8 @@ class Rook(Piece):
         self.name = "ROOK"
         self.enemy = False
         self.alive = True
-
-    def get_name(self):
-        return self.name
+        self.image = pygame.image.load("./images/rw.png")
+        self.enemy_image = pygame.image.load("./images/rb.png")
 
     def get_moves(self, pos):
         return Piece.perpendicular_moves(pos)
@@ -62,9 +61,8 @@ class Bishop(Piece):
         self.name = "BISHOP"
         self.enemy = False
         self.alive = True
-
-    def get_name(self):
-        return self.name
+        self.image = pygame.image.load("./images/bw.png")
+        self.enemy_image = pygame.image.load("./images/bb.png")
 
     def get_moves(self, pos):
         return Piece.diagonal_moves(pos)
@@ -81,9 +79,8 @@ class Queen(Piece):
         self.name = "QUEEN"
         self.enemy = False
         self.alive = True
-
-    def get_name(self):
-        return self.name
+        self.image = pygame.image.load("./images/qw.png")
+        self.enemy_image = pygame.image.load("./images/qb.png")
 
     def get_moves(self, pos):
         return Piece.diagonal_moves(pos) + Piece.perpendicular_moves(pos)
@@ -100,9 +97,8 @@ class Knight(Piece):
         self.name = "KNIGHT"
         self.enemy = False
         self.alive = True
-
-    def get_name(self):
-        return self.name
+        self.image = pygame.image.load("./images/hw.png")
+        self.enemy_image = pygame.image.load("./images/hb.png")
 
     def get_moves(self, pos):
         moves = []

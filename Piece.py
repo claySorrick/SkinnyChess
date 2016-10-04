@@ -7,19 +7,26 @@ from util import *
 
 
 class Piece:
+    name = ""
     alive = True
     enemy = False
+    image = ""
+    enemy_image = ""
 
     def __init__(self):
         pass
 
     @abstractmethod
-    def get_name(self):
-        pass
-
-    @abstractmethod
     def get_moves(self, pos):
         pass
+
+    def get_name(self):
+        return self.name
+
+    def get_image(self):
+        if self.is_enemy():
+            return self.enemy_image
+        return self.image
 
     def is_alive(self):
         return self.alive
