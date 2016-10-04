@@ -49,10 +49,10 @@ class Board:
                 if self.board[x][y].is_selected():
                     selected_mod = 3
                 if self.board[x][y].is_highlighted():
-                    color = GREY
+                    color = BLUE
                 else:
                     if (x + y) % 2 == 0:
-                        color = BLUE
+                        color = GREY
                     else:
                         color = LIGHT_BLACK
 

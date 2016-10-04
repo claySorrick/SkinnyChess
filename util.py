@@ -1,13 +1,13 @@
 # Define some colors
 BLACK = (0, 0, 0)  # background
 LIGHT_RED = (153, 0, 0)  # empty squares
-BLUE = (0, 102, 204)  # empty squares
+GREY = (160, 160, 160)  # empty squares
 GREEN = (0, 255, 0)  # PAWN
 RED = (255, 0, 0)  # QUEEN
 DARK_BLUE = (0, 0, 255)  # BISHOP
 YELLOW = (255, 255, 0)  # ROOK
 PURPLE = (128, 0, 128)  # KNIGHT
-GREY = (192, 192, 192)  # highlighting
+BLUE = (0, 102, 204)  # highlighting
 LIGHT_BLUE = (153, 204, 255)  # heaven
 LIGHT_BLACK = (96, 96, 96)  # hell
 
