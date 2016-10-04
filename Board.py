@@ -33,7 +33,7 @@ class Board:
         # initial heaven
         self.heaven[0][HEAVEN_HEIGHT-1].set_enemy_piece(Pawn())
         self.heaven[1][HEAVEN_HEIGHT-2].set_enemy_piece(Knight())
-        self.selected = [0, 0]
+        self.selected = ""
         self.highlighted = []
 
     def draw(self, screen, move_offset):
@@ -92,16 +92,15 @@ class Board:
             color = WHITE
         return color
 
-    def highlight(self, squares):
+    def highlight_squares(self, squares):
         if squares:
             for x, y in squares:
-                if not self.board[x][y].has_piece():
-                    self.board[x][y].highlight()
-                    self.highlighted.append((x, y))
+                self.board[x][y].highlight()
+                self.highlighted.append(self.board[x][y])
 
-    def unhighlight(self):
-        for x, y in self.highlighted:
-            self.board[x][y].unhighlight()
+    def unhighlight_squares(self):
+        for sqr in self.highlighted:
+            sqr.unhighlight()
         self.highlighted = []
 
     def select(self, pos, scroll_offset):
@@ -110,28 +109,28 @@ class Board:
         print(x, y)
         if x >= BOARD_X or x < 0 or y >= BOARD_Y or y < 0:
             return
-        if self.selected and x == self.selected[0] and y == self.selected[1]:
-            self.board[x][y].unselect()
-            self.selected = []
-            self.unhighlight()
+        sqr = self.board[x][y]
+        if sqr.is_selected():
+            sqr.unselect()
+            self.selected = ""
+            self.unhighlight_squares()
             return
-        if self.highlighted.__contains__((x, y)):
-            self.board[x][y].set_piece(self.board[self.selected[0]][self.selected[1]].get_piece())
-            self.board[self.selected[0]][self.selected[1]].remove_piece()
-            self.board[self.selected[0]][self.selected[1]].unselect()
+        if self.highlighted.__contains__(sqr):
+            sqr.set_piece(self.selected.get_piece())
+            self.selected.remove_piece()
+            self.selected.unselect()
             self.selected = []
-            self.unhighlight()
+            self.unhighlight_squares()
         else:
-            self.board[x][y].select()
-            self.unhighlight()
-            if self.selected and self.selected != [x, y]:
-                self.board[self.selected[0]][self.selected[1]].unselect()
-            self.selected = [x, y]
-            if self.board[x][y].has_piece():
-                piece = self.board[x][y].get_piece()
-                print(piece.is_enemy())
+            sqr.select()
+            self.unhighlight_squares()
+            if self.selected and self.selected != sqr:
+                self.selected.unselect()
+            self.selected = sqr
+            if sqr.has_piece():
+                piece = sqr.get_piece()
                 moves = piece.get_moves([x, y])
-                self.highlight(moves)
+                self.highlight_squares(moves)
 
     def shift_board(self):
         # move bottom to hell

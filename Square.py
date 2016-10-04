@@ -47,7 +47,8 @@ class Square:
         return self.selected
 
     def highlight(self):
-        self.highlighted = True
+        if not self.has_piece():
+            self.highlighted = True
 
     def unhighlight(self):
         self.highlighted = False
