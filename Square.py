@@ -8,10 +8,18 @@ from util import *
 class Square:
 
     def __init__(self):
-        self.color = LIGHT_RED
+        self.color = GREY
+        self.board_color = ""
         self.piece = ""
         self.selected = False
         self.highlighted = False
+
+    def get_board_color(self):
+        return self.board_color
+
+    def set_board_color(self, color):
+        self.board_color = color
+        self.color = color
 
     def get_color(self):
         return self.color
@@ -50,9 +58,13 @@ class Square:
     def highlight(self):
         if not self.has_piece():
             self.highlighted = True
+            self.color = BLUE
+            return True
+        return False
 
     def unhighlight(self):
         self.highlighted = False
+        self.color = self.board_color
 
     def is_highlighted(self):
         return self.highlighted

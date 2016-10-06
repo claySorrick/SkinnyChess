@@ -31,7 +31,10 @@ SIZE_Y = SQUARE_HEIGHT * (BOARD_Y + 2) + MARGIN * (BOARD_Y + 3)
 OFFSET = SQUARE_HEIGHT + MARGIN
 
 # heaven (future board) height
-HEAVEN_HEIGHT = 4
+HEAVEN_HEIGHT = 2
 
 # piece offset
 PIECE_OFFSET = 14
+
+# Scroll speed
+SPEED = 2

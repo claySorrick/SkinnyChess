@@ -46,7 +46,7 @@ while not done:
 
     # Increment board movement offset
     clk_counter += 1
-    if clk_counter % 10 == 0:
+    if clk_counter % SPEED == 0:
         clk_counter = 0
         scroll_offset += 2
         if scroll_offset > OFFSET:
