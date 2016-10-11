@@ -77,8 +77,8 @@ class Board:
                                       (MARGIN + SQUARE_HEIGHT) * (y - 1) + MARGIN + 1 + move_offset + PIECE_OFFSET))
                 if self.board[x][y].has_piece():
                     screen.blit(self.board[x][y].get_piece().get_image(),
-                        ((MARGIN + SQUARE_WIDTH) * x + MARGIN + 1 + PIECE_OFFSET,
-                        (MARGIN + SQUARE_HEIGHT) * y + MARGIN + 1 + OFFSET + move_offset + PIECE_OFFSET))
+                        ((MARGIN + SQUARE_WIDTH) * x + MARGIN + PIECE_OFFSET,
+                        (MARGIN + SQUARE_HEIGHT) * y + MARGIN + OFFSET + move_offset + PIECE_OFFSET))
 
     def highlight_squares(self, squares):
         if squares:
@@ -124,6 +124,9 @@ class Board:
     def shift_board(self):
         # move bottom to hell
         for x in range(BOARD_X):
+            if self.board[x][-1].is_selected():
+                self.board[x][-1].unselect()
+                self.unhighlight_squares()
             self.hell[x].insert(0, self.board[x].pop())
 
         # move heaven into board
