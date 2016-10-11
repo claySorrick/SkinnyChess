@@ -34,7 +34,12 @@ OFFSET = SQUARE_HEIGHT + MARGIN
 HEAVEN_HEIGHT = 2
 
 # piece offset
-PIECE_OFFSET = 14
+PIECE_OFFSET = 15
 
 # Scroll speed
-SPEED = 2
+SPEED = 12
+
+# Music on/off
+ON = True
+OFF = False
+MUSIC_TOGGLE = ON

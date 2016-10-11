@@ -38,6 +38,10 @@ clock = pygame.time.Clock()
 clk_counter = 0
 scroll_offset = 2
 
+# music
+pygame.mixer.music.load("sound/start.ogg")
+if MUSIC_TOGGLE:
+    pygame.mixer.music.play(0)
 # -------- Main Program Loop -----------
 while not done:
 

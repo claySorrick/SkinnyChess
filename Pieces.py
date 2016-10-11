@@ -31,6 +31,17 @@ class Pawn(Piece):
                 moves = [(x, y - 1)]
         return moves
 
+    def get_attack_moves(self, pos):
+        x = pos[1]
+        y = pos[2]
+        attacks = []
+        if 0 < y < BOARD_Y and 0 < x < BOARD_X:
+            if self.enemy:
+                attacks = [(x + 1, y + 1), (x - 1, y + 1)]
+            else:
+                attacks = [(x + 1, y - 1), (x - 1, y - 1)]
+        return attacks
+
 
 """
 Rook Piece class

@@ -20,6 +20,10 @@ class Piece:
     def get_moves(self, pos):
         pass
 
+    @abstractmethod
+    def get_attack_moves(self, pos):
+        return self.get_moves(pos)
+
     def get_name(self):
         return self.name
 

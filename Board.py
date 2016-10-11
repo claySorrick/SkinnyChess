@@ -26,6 +26,7 @@ class Board:
             self.shift_board()
         screen.fill(BLACK)
 
+
         # draw board
         for x in range(self.col):
             for y in range(self.row):
@@ -37,10 +38,6 @@ class Board:
                                   (MARGIN + SQUARE_HEIGHT) * y + MARGIN + (1 * selected_mod) + OFFSET + move_offset,
                                   SQUARE_WIDTH - (2 * selected_mod),
                                   SQUARE_HEIGHT - (2 * selected_mod)])
-                if self.board[x][y].has_piece():
-                    screen.blit(self.board[x][y].get_piece().get_image(),
-                        ((MARGIN + SQUARE_WIDTH) * x + MARGIN + (1 * selected_mod) + PIECE_OFFSET,
-                        (MARGIN + SQUARE_HEIGHT) * y + MARGIN + (1 * selected_mod) + OFFSET + move_offset + PIECE_OFFSET))
 
         # draw heaven
         for x in range(self.col):
@@ -50,10 +47,6 @@ class Board:
                                   (MARGIN + SQUARE_HEIGHT) * (y - 1) + MARGIN + 1 + move_offset,
                                   SQUARE_WIDTH - 2,
                                   SQUARE_HEIGHT - 2])
-                if self.heaven[x][y].has_piece():
-                    screen.blit(self.heaven[x][y].get_piece().get_image(),
-                                ((MARGIN + SQUARE_WIDTH) * x + MARGIN + 1 + PIECE_OFFSET,
-                                  (MARGIN + SQUARE_HEIGHT) * (y - 1) + MARGIN + 1 + move_offset + PIECE_OFFSET))
 
         # draw hell
         for x in range(self.col):
@@ -67,6 +60,25 @@ class Board:
                 screen.blit(self.hell[x][y].get_piece().get_image(),
                             ((MARGIN + SQUARE_WIDTH) * x + MARGIN + 1 + PIECE_OFFSET,
                               (MARGIN + SQUARE_HEIGHT) * (BOARD_Y + 1) + MARGIN + 1 + move_offset + PIECE_OFFSET))
+
+        # draw heaven line
+        pygame.draw.rect(screen, RED, [0, SQUARE_HEIGHT + MARGIN, SIZE_X, MARGIN])
+
+        # draw hell line
+        pygame.draw.rect(screen, RED, [0, (SQUARE_HEIGHT + MARGIN) * (BOARD_Y + 1), SIZE_X, MARGIN])
+
+        # draw pieces last so they move over heaven/hell lines
+        for x in range(self.col):
+            for y in range(self.row):
+                if y < self.heaven[x].__len__():
+                    if self.heaven[x][y].has_piece():
+                        screen.blit(self.heaven[x][y].get_piece().get_image(),
+                                    ((MARGIN + SQUARE_WIDTH) * x + MARGIN + 1 + PIECE_OFFSET,
+                                      (MARGIN + SQUARE_HEIGHT) * (y - 1) + MARGIN + 1 + move_offset + PIECE_OFFSET))
+                if self.board[x][y].has_piece():
+                    screen.blit(self.board[x][y].get_piece().get_image(),
+                        ((MARGIN + SQUARE_WIDTH) * x + MARGIN + 1 + PIECE_OFFSET,
+                        (MARGIN + SQUARE_HEIGHT) * y + MARGIN + 1 + OFFSET + move_offset + PIECE_OFFSET))
 
     def highlight_squares(self, squares):
         if squares:
@@ -104,7 +116,7 @@ class Board:
             if self.selected and self.selected != sqr:
                 self.selected.unselect()
             self.selected = sqr
-            if sqr.has_piece():
+            if sqr.has_piece() and not sqr.get_piece().is_enemy():
                 piece = sqr.get_piece()
                 moves = piece.get_moves([x, y])
                 self.highlight_squares(moves)
