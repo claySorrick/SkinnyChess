@@ -53,6 +53,7 @@ while not done:
     if clk_counter % SPEED == 0:
         clk_counter = 0
         scroll_offset += 2
+
         if scroll_offset > OFFSET:
             scroll_offset = 0
 
@@ -73,6 +74,7 @@ while not done:
     # Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
 
+    # Game Over
     if not board.is_valid():
         done = True
 

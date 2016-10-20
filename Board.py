@@ -22,6 +22,7 @@ class Board:
         self.threatened = []
         self.player_pieces = []
         self.enemy_pieces = []
+        self.sped_up = False
         self.init_board()
 
     def draw(self, screen, move_offset):
@@ -121,7 +122,6 @@ class Board:
     def select(self, pos, scroll_offset):
         x = pos[0] // (SQUARE_WIDTH + MARGIN)
         y = (pos[1] - OFFSET - scroll_offset) // (SQUARE_HEIGHT + MARGIN)
-        print(x, y)
         # click is off the board
         if x >= BOARD_X or x < 0 or y >= BOARD_Y or y < 0:
             return
@@ -135,13 +135,12 @@ class Board:
             sqr.set_piece(self.selected.get_piece())
             self.selected.remove_piece()
             self.unselect()
-
+            self.enemy_attack()
         elif sqr in self.targeted:
             # take piece
-            piece = self.selected.get_piece()
-            sqr.set_piece(piece)
-            self.selected.remove_piece()
+            self.take_piece(self.selected, sqr)
             self.unselect()
+            self.enemy_attack()
         else:
             sqr.select()
             self.unhighlight_squares()
@@ -149,7 +148,7 @@ class Board:
             if self.selected and self.selected != sqr:
                 self.selected.unselect()
             self.selected = sqr
-            if sqr.has_piece() and not sqr.get_piece().is_enemy():
+            if sqr.has_player_piece():
                 piece = sqr.get_piece()
                 moves = piece.get_moves([x, y])
                 self.highlight_squares(moves)
@@ -177,14 +176,43 @@ class Board:
 
         # move heaven into board
         for x in range(BOARD_X):
-            rand = random.randint(0, 2)
+            rand = random.randint(0, 1000)
             new_square = Square()
-            if rand == 0:
+            if rand % 2 == 0:
                 new_square.set_enemy_piece(self.get_random_piece())
-                self.enemy_pieces.append(new_square.get_piece())
             new_square.set_board_color(self.board[x][1].get_board_color())
+            if self.heaven[x][-1].has_enemy_piece():
+                self.enemy_pieces.append(self.heaven[x][-1].get_piece())
             self.board[x].insert(0, self.heaven[x].pop())
             self.heaven[x].insert(0, new_square)
+
+    def take_piece(self, attacker, victim):
+        piece = attacker.get_piece()
+        if victim.has_enemy_piece():
+            self.enemy_pieces.remove(victim.get_piece())
+        else:
+            self.player_pieces.remove(victim.get_piece())
+        victim.set_piece(piece)
+        attacker.remove_piece()
+
+    def enemy_attack(self):
+        for x in range(BOARD_X):
+            for y in range(BOARD_Y):
+                attacker = self.board[x][y]
+                if attacker.has_enemy_piece():
+                    attack_moves = attacker.get_piece().get_attack_moves([x, y])
+                    for attack in attack_moves:
+                        for xx, yy in attack:
+                            if self.board[xx][yy].has_player_piece():
+                                self.take_piece(attacker, self.board[xx][yy])
+                                print("tooken")
+                                break
+                            else:
+                                break
+
+                else:
+                    continue
+
 
     @staticmethod
     def get_random_piece():
@@ -206,18 +234,18 @@ class Board:
 
     def init_board(self):
         # Players pieces
-        self.board[0][7].set_piece(Rook())
-        self.player_pieces.append(self.board[0][7].get_piece())
-        self.board[1][7].set_piece(Knight())
-        self.player_pieces.append(self.board[1][7].get_piece())
-        self.board[2][7].set_piece(Bishop())
-        self.player_pieces.append(self.board[2][7].get_piece())
-        self.board[3][7].set_piece(Queen())
-        self.player_pieces.append(self.board[3][7].get_piece())
-        self.board[1][6].set_piece(Pawn())
+        self.board[0][6].set_piece(Rook())
+        self.player_pieces.append(self.board[0][6].get_piece())
+        self.board[1][6].set_piece(Knight())
         self.player_pieces.append(self.board[1][6].get_piece())
-        self.board[2][6].set_piece(Pawn())
+        self.board[2][6].set_piece(Bishop())
         self.player_pieces.append(self.board[2][6].get_piece())
+        self.board[3][6].set_piece(Queen())
+        self.player_pieces.append(self.board[3][6].get_piece())
+        self.board[1][5].set_piece(Pawn())
+        self.player_pieces.append(self.board[1][5].get_piece())
+        self.board[2][5].set_piece(Pawn())
+        self.player_pieces.append(self.board[2][5].get_piece())
         # enemy pieces
         # self.board[0][0].set_enemy_piece(Rook())
         # self.enemy_pieces.append(self.board[0][0].get_piece())

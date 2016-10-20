@@ -37,20 +37,24 @@ class Pawn(Piece):
         x = pos[0]
         y = pos[1]
         final_attacks = []
-        if 0 < y < BOARD_Y and 0 < x < BOARD_X:
+        if 0 <= y < BOARD_Y and 0 <= x < BOARD_X:
             attacks = []
-            if self.enemy:
-                attacks.append((x + 1, y + 1))
-                final_attacks.append(attacks)
-                attacks = []
-                attacks.append((x - 1, y + 1))
-                final_attacks.append(attacks)
-            else:
-                attacks.append((x + 1, y - 1))
-                final_attacks.append(attacks)
-                attacks = []
-                attacks.append((x - 1, y - 1))
-                final_attacks.append(attacks)
+            if x < BOARD_X - 1:
+                if self.enemy:
+                    attacks.append((x + 1, y + 1))
+                    final_attacks.append(attacks)
+                    attacks = []
+                else:
+                    attacks.append((x + 1, y - 1))
+                    final_attacks.append(attacks)
+                    attacks = []
+            if x > 0:
+                if self.enemy:
+                    attacks.append((x - 1, y + 1))
+                    final_attacks.append(attacks)
+                else:
+                    attacks.append((x - 1, y - 1))
+                    final_attacks.append(attacks)
         return final_attacks
 
 
