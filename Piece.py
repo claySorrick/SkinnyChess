@@ -47,22 +47,51 @@ class Piece:
     @staticmethod
     def perpendicular_moves(pos):
         moves = []
-        for x in range(BOARD_X):
+        final_moves = []
+        for x in range(0, pos[0]):
             moves.append((x, pos[1]))
-        for y in range(BOARD_Y):
+        if moves:
+            final_moves.append(list(reversed(moves)))
+            moves = []
+        for x in range(pos[0]+1, BOARD_X):
+            moves.append((x, pos[1]))
+        if moves:
+            final_moves.append(moves)
+            moves = []
+        for y in range(0, pos[1]):
             moves.append((pos[0], y))
-        return moves
+        if moves:
+            final_moves.append(list(reversed(moves)))
+            moves = []
+        for y in range(pos[1]+1, BOARD_Y):
+            moves.append((pos[0], y))
+        if moves:
+            final_moves.append(moves)
+        print(final_moves)
+        return final_moves
 
     @staticmethod
     def diagonal_moves(pos):
-        moves = []
+        moves1 = []
+        moves2 = []
+        moves3 = []
+        moves4 = []
+        final_moves = []
         for x in range(1, BOARD_X):
             if pos[0] + x < BOARD_X and pos[1] + x < BOARD_Y:
-                moves.append((pos[0] + x, pos[1] + x))
+                moves1.append((pos[0] + x, pos[1] + x))
             if pos[0] + x < BOARD_X and pos[1] - x >= 0:
-                moves.append((pos[0] + x, pos[1] - x))
+                moves2.append((pos[0] + x, pos[1] - x))
             if pos[0] - x >= 0 and pos[1] + x < BOARD_Y:
-                moves.append((pos[0] - x, pos[1] + x))
+                moves3.append((pos[0] - x, pos[1] + x))
             if pos[0] - x >= 0 and pos[1] - x >= 0:
-                moves.append((pos[0] - x, pos[1] - x))
-        return moves
+                moves4.append((pos[0] - x, pos[1] - x))
+        if moves1:
+            final_moves.append(moves1)
+        if moves2:
+            final_moves.append(moves2)
+        if moves3:
+            final_moves.append(moves3)
+        if moves4:
+            final_moves.append(moves4)
+        return final_moves

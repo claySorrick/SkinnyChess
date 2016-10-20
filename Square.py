@@ -13,6 +13,7 @@ class Square:
         self.piece = ""
         self.selected = False
         self.highlighted = False
+        self.targeted = False
 
     def get_board_color(self):
         return self.board_color
@@ -68,3 +69,15 @@ class Square:
 
     def is_highlighted(self):
         return self.highlighted
+
+    def target(self):
+        if self.piece and self.piece.is_enemy():
+            self.targeted = True
+            return True
+        return False
+
+    def untarget(self):
+        self.targeted = False
+
+    def is_targeted(self):
+        return self.targeted

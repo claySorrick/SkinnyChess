@@ -18,14 +18,13 @@ class Board:
         self.col = col
         self.selected = ""
         self.highlighted = []
+        self.targeted = []
         self.init_board()
 
     def draw(self, screen, move_offset):
         if move_offset == 0:
-            print("shifting board")
             self.shift_board()
         screen.fill(BLACK)
-
 
         # draw board
         for x in range(self.col):
@@ -33,6 +32,13 @@ class Board:
                 selected_mod = 1
                 if self.board[x][y].is_selected():
                     selected_mod = 3
+                elif self.board[x][y].is_targeted():
+                    selected_mod = 3
+                    pygame.draw.rect(screen, RED,
+                                     [(MARGIN + SQUARE_WIDTH) * x + MARGIN + 1,
+                                      (MARGIN + SQUARE_HEIGHT) * y + MARGIN + 1 + OFFSET + move_offset,
+                                      SQUARE_WIDTH - 2,
+                                      SQUARE_HEIGHT - 2])
                 pygame.draw.rect(screen, self.board[x][y].get_color(),
                                  [(MARGIN + SQUARE_WIDTH) * x + MARGIN + (1 * selected_mod),
                                   (MARGIN + SQUARE_HEIGHT) * y + MARGIN + (1 * selected_mod) + OFFSET + move_offset,
@@ -82,14 +88,32 @@ class Board:
 
     def highlight_squares(self, squares):
         if squares:
-            for x, y in squares:
-                if self.board[x][y].highlight():
-                    self.highlighted.append(self.board[x][y])
+            for path in squares:
+                for x, y in path:
+                    if self.board[x][y].highlight():
+                        self.highlighted.append(self.board[x][y])
+                    else:
+                        break
 
     def unhighlight_squares(self):
         for sqr in self.highlighted:
             sqr.unhighlight()
         self.highlighted = []
+
+    def target_squares(self, squares):
+        if squares:
+            for path in squares:
+                for x, y in path:
+                    if self.board[x][y].target():
+                        self.targeted.append(self.board[x][y])
+                        break
+                    elif self.board[x][y].has_piece():
+                        break
+
+    def untarget_squares(self):
+        for sqr in self.targeted:
+            sqr.untarget()
+        self.targeted = []
 
     def select(self, pos, scroll_offset):
         x = pos[0] // (SQUARE_WIDTH + MARGIN)
@@ -101,18 +125,23 @@ class Board:
         sqr = self.board[x][y]
         if sqr.is_selected():
             sqr.unselect()
-            self.selected = ""
-            self.unhighlight_squares()
+            self.unselect()
             return
         if sqr in self.highlighted:
+            # move piece
             sqr.set_piece(self.selected.get_piece())
             self.selected.remove_piece()
-            self.selected.unselect()
-            self.selected = []
-            self.unhighlight_squares()
+            self.unselect()
+        elif sqr in self.targeted:
+            # take piece
+            piece = self.selected.get_piece()
+            sqr.set_piece(piece)
+            self.selected.remove_piece()
+            self.unselect()
         else:
             sqr.select()
             self.unhighlight_squares()
+            self.untarget_squares()
             if self.selected and self.selected != sqr:
                 self.selected.unselect()
             self.selected = sqr
@@ -120,6 +149,15 @@ class Board:
                 piece = sqr.get_piece()
                 moves = piece.get_moves([x, y])
                 self.highlight_squares(moves)
+                attacks = piece.get_attack_moves([x, y])
+                self.target_squares(attacks)
+
+    def unselect(self):
+        if self.selected:
+            self.selected.unselect()
+        self.selected = []
+        self.unhighlight_squares()
+        self.untarget_squares()
 
     def shift_board(self):
         # move bottom to hell
@@ -137,7 +175,6 @@ class Board:
                 new_square.set_enemy_piece(self.get_random_piece())
             new_square.set_board_color(self.board[x][1].get_board_color())
             self.board[x].insert(0, self.heaven[x].pop())
-
             self.heaven[x].insert(0, new_square)
 
     @staticmethod

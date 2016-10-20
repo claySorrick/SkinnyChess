@@ -23,24 +23,35 @@ class Pawn(Piece):
     def get_moves(self, pos):
         x = pos[0]
         y = pos[1]
-        moves = []
+        final_moves = []
         if 0 < y < BOARD_Y:
+            moves = []
             if self.enemy:
                 moves = [(x, y + 1)]
             else:
                 moves = [(x, y - 1)]
-        return moves
+            final_moves.append(moves)
+        return final_moves
 
     def get_attack_moves(self, pos):
-        x = pos[1]
-        y = pos[2]
-        attacks = []
+        x = pos[0]
+        y = pos[1]
+        final_attacks = []
         if 0 < y < BOARD_Y and 0 < x < BOARD_X:
+            attacks = []
             if self.enemy:
-                attacks = [(x + 1, y + 1), (x - 1, y + 1)]
+                attacks.append((x + 1, y + 1))
+                final_attacks.append(attacks)
+                attacks = []
+                attacks.append((x - 1, y + 1))
+                final_attacks.append(attacks)
             else:
-                attacks = [(x + 1, y - 1), (x - 1, y - 1)]
-        return attacks
+                attacks.append((x + 1, y - 1))
+                final_attacks.append(attacks)
+                attacks = []
+                attacks.append((x - 1, y - 1))
+                final_attacks.append(attacks)
+        return final_attacks
 
 
 """
@@ -113,20 +124,37 @@ class Knight(Piece):
 
     def get_moves(self, pos):
         moves = []
+        final_moves = []
         if pos[0] + 2 < BOARD_X and pos[1] + 1 < BOARD_Y:
             moves.append((pos[0] + 2, pos[1] + 1))
+            final_moves.append(moves)
+            moves = []
         if pos[0] + 2 < BOARD_X and pos[1] - 1 >= 0:
             moves.append((pos[0] + 2, pos[1] - 1))
+            final_moves.append(moves)
+            moves = []
         if pos[0] + 1 < BOARD_X and pos[1] + 2 < BOARD_Y:
             moves.append((pos[0] + 1, pos[1] + 2))
+            final_moves.append(moves)
+            moves = []
         if pos[0] - 1 >= 0 and pos[1] + 2 < BOARD_Y:
             moves.append((pos[0] - 1, pos[1] + 2))
+            final_moves.append(moves)
+            moves = []
         if pos[0] - 2 >= 0 and pos[1] - 1 >= 0:
             moves.append((pos[0] - 2, pos[1] - 1))
+            final_moves.append(moves)
+            moves = []
         if pos[0] - 2 >= 0 and pos[1] + 1 < BOARD_Y:
             moves.append((pos[0] - 2, pos[1] + 1))
+            final_moves.append(moves)
+            moves = []
         if pos[0] - 1 >= 0 and pos[1] - 2 >= 0:
             moves.append((pos[0] - 1, pos[1] - 2))
+            final_moves.append(moves)
+            moves = []
         if pos[0] + 1 < BOARD_X and pos[1] - 2 >= 0:
             moves.append((pos[0] + 1, pos[1] - 2))
-        return moves
+            final_moves.append(moves)
+            moves = []
+        return final_moves
