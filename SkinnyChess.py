@@ -73,6 +73,9 @@ while not done:
     # Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
 
+    if not board.is_valid():
+        done = True
+
 # Be IDLE friendly. If you forget this line, the program will 'hang'
 # on exit.
 pygame.quit()

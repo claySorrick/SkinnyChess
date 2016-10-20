@@ -37,7 +37,7 @@ HEAVEN_HEIGHT = 2
 PIECE_OFFSET = 15
 
 # Scroll speed
-SPEED = 60
+SPEED = 6
 
 # Music on/off
 ON = True

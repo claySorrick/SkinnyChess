@@ -19,6 +19,9 @@ class Board:
         self.selected = ""
         self.highlighted = []
         self.targeted = []
+        self.threatened = []
+        self.player_pieces = []
+        self.enemy_pieces = []
         self.init_board()
 
     def draw(self, screen, move_offset):
@@ -132,6 +135,7 @@ class Board:
             sqr.set_piece(self.selected.get_piece())
             self.selected.remove_piece()
             self.unselect()
+
         elif sqr in self.targeted:
             # take piece
             piece = self.selected.get_piece()
@@ -165,6 +169,10 @@ class Board:
             if self.board[x][-1].is_selected():
                 self.board[x][-1].unselect()
                 self.unhighlight_squares()
+            if self.board[x][-1].has_player_piece():
+                self.player_pieces.remove(self.board[x][-1].get_piece())
+            elif self.board[x][-1].has_enemy_piece():
+                self.enemy_pieces.remove(self.board[x][-1].get_piece())
             self.hell[x].insert(0, self.board[x].pop())
 
         # move heaven into board
@@ -173,6 +181,7 @@ class Board:
             new_square = Square()
             if rand == 0:
                 new_square.set_enemy_piece(self.get_random_piece())
+                self.enemy_pieces.append(new_square.get_piece())
             new_square.set_board_color(self.board[x][1].get_board_color())
             self.board[x].insert(0, self.heaven[x].pop())
             self.heaven[x].insert(0, new_square)
@@ -190,21 +199,38 @@ class Board:
             new_piece = Pawn()
         return new_piece
 
+    def is_valid(self):
+        if self.player_pieces:
+            return True
+        return False
+
     def init_board(self):
         # Players pieces
         self.board[0][7].set_piece(Rook())
+        self.player_pieces.append(self.board[0][7].get_piece())
         self.board[1][7].set_piece(Knight())
+        self.player_pieces.append(self.board[1][7].get_piece())
         self.board[2][7].set_piece(Bishop())
+        self.player_pieces.append(self.board[2][7].get_piece())
         self.board[3][7].set_piece(Queen())
+        self.player_pieces.append(self.board[3][7].get_piece())
         self.board[1][6].set_piece(Pawn())
+        self.player_pieces.append(self.board[1][6].get_piece())
         self.board[2][6].set_piece(Pawn())
+        self.player_pieces.append(self.board[2][6].get_piece())
         # enemy pieces
-        self.board[0][0].set_enemy_piece(Rook())
+        # self.board[0][0].set_enemy_piece(Rook())
+        # self.enemy_pieces.append(self.board[0][0].get_piece())
         self.board[1][0].set_enemy_piece(Knight())
+        self.enemy_pieces.append(self.board[1][0].get_piece())
         self.board[2][0].set_enemy_piece(Bishop())
-        self.board[3][0].set_enemy_piece(Queen())
+        self.enemy_pieces.append(self.board[2][0].get_piece())
+        # self.board[3][0].set_enemy_piece(Queen())
+        # self.enemy_pieces.append(self.board[3][0].get_piece())
         self.board[1][1].set_enemy_piece(Pawn())
+        self.enemy_pieces.append(self.board[1][1].get_piece())
         self.board[2][1].set_enemy_piece(Pawn())
+        self.enemy_pieces.append(self.board[2][1].get_piece())
 
         # board
         for x in range(self.col):

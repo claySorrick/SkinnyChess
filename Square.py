@@ -47,6 +47,18 @@ class Square:
             return False
         return True
 
+    def has_player_piece(self):
+        if self.piece:
+            if not self.piece.is_enemy():
+                return True
+        return False
+
+    def has_enemy_piece(self):
+        if self.piece:
+            if self.piece.is_enemy():
+                return True
+        return False
+
     def select(self):
         self.selected = True
 
