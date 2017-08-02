@@ -67,7 +67,6 @@ class Piece:
             moves.append((pos[0], y))
         if moves:
             final_moves.append(moves)
-        print(final_moves)
         return final_moves
 
     @staticmethod

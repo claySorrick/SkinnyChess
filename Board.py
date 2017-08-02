@@ -205,7 +205,6 @@ class Board:
                         for xx, yy in attack:
                             if self.board[xx][yy].has_player_piece():
                                 self.take_piece(attacker, self.board[xx][yy])
-                                print("tooken")
                                 break
                             else:
                                 break
